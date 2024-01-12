@@ -84,45 +84,47 @@ def display_all_players_name():
     return item_lst
 
 
-def display_BAT_players_name():
+def display_BAT_players_specific_data():
     db = sqlite3.connect('database.db')
     query = """
-    SELECT player from stats where ctg="BAT"
+    SELECT player ,value,matches ,runs FROM stats WHERE ctg="BAT"
     """
     cur = db.cursor()
-    items_io = cur.execute(query).fetchall()
-    item_lst = [i[0] for i in items_io]
-    return item_lst
+    data = cur.execute(query).fetchall()
+    db.close()
+    return data
+
+
 
 def display_BWL_players_name():
-    db = sqlite3.connect('database.db')
-    query = """
-    SELECT player from stats where ctg="BWL"
+     db = sqlite3.connect('database.db')
+     query = """
+    SELECT player ,value,matches ,runs FROM stats WHERE ctg="BWL"
     """
-    cur = db.cursor()
-    items_io = cur.execute(query).fetchall()
-    item_lst = [i[0] for i in items_io]
-    return item_lst
+     cur = db.cursor()
+     data = cur.execute(query).fetchall()
+     db.close()
+     return data
 
 def display_AR_players_name():
-    db = sqlite3.connect('database.db')
-    query = """
-    SELECT player from stats where ctg="AR"
+     db = sqlite3.connect('database.db')
+     query = """
+    SELECT player ,value,matches ,runs FROM stats WHERE ctg="AR"
     """
-    cur = db.cursor()
-    items_io = cur.execute(query).fetchall()
-    item_lst = [i[0] for i in items_io]
-    return item_lst
+     cur = db.cursor()
+     data = cur.execute(query).fetchall()
+     db.close()
+     return data
 
 def display_WK_players_name():
     db = sqlite3.connect('database.db')
     query = """
-    SELECT player from stats where ctg="WK"
+    SELECT player ,value,matches ,runs FROM stats WHERE ctg="WK"
     """
     cur = db.cursor()
-    items_io = cur.execute(query).fetchall()
-    item_lst = [i[0] for i in items_io]
-    return item_lst
+    data = cur.execute(query).fetchall()
+    db.close()
+    return data
 
 
 def check_player_role(player):

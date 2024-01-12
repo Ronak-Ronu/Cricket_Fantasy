@@ -4,7 +4,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QMessageBox
 import sys
-from database import insert_new_team,display_all_players_name,display_BAT_players_name,display_BWL_players_name,display_AR_players_name,display_WK_players_name,insert_new_stats,insert_new_match,check_player_role,get_player_value
+from database import insert_new_team,display_all_players_name,display_BWL_players_name,display_AR_players_name,display_WK_players_name,insert_new_stats,insert_new_match,check_player_role,get_player_value,display_BAT_players_specific_data
 
 
 class MainWindow(QMainWindow):
@@ -62,20 +62,30 @@ class MainWindow(QMainWindow):
 
      def display_BAT_players_name_radio(self,selected):
         if selected:
-            stas_player = display_BAT_players_name()
-            self.selections_list_widget.addItems(stas_player)
+            stas_player = display_BAT_players_specific_data()
+            stats_player_name=[i[0] for i in stas_player]
+            stats_player_value_bat=[i[1] for i in stas_player]
+            print(stats_player_name)
+            avail_score_bat=sum(stats_player_value_bat)
+            self.selections_list_widget.addItems(stats_player_name)
             print(self.selections_list_widget.count())
             print(stas_player)
-
+            self.points_available_value.setText(str(avail_score_bat))
         else:
             self.selections_list_widget.clear()
 
      def display_BWL_players_name_radio(self,selected):
         if selected:
             stas_player = display_BWL_players_name()
-            self.selections_list_widget.addItems(stas_player)
+            stats_player_name=[i[0] for i in stas_player]
+            stats_player_value_bwl=[i[1] for i in stas_player]
+            avail_score_bwl=sum(stats_player_value_bwl)
+            print("stats player value :{}".format(sum(stats_player_value_bwl)))
+            self.selections_list_widget.addItems(stats_player_name)
             print(self.selections_list_widget.count())
             print(stas_player)
+            self.points_available_value.setText(str(avail_score_bwl))
+
         else:
             self.selections_list_widget.clear()
         
@@ -83,9 +93,16 @@ class MainWindow(QMainWindow):
      def display_WK_players_name_radio(self,selected):
         if selected:
             stas_player = display_WK_players_name()
-            self.selections_list_widget.addItems(stas_player)
+            stats_player_name=[i[0] for i in stas_player]
+            stats_player_value_wk=[i[1] for i in stas_player]
+            avail_score_wk=sum(stats_player_value_wk)
+            print("stats player value :{}".format(sum(stats_player_value_wk)))
+
+            self.selections_list_widget.addItems(stats_player_name)
             self.selections_list_widget.count()
             print(stas_player)
+            self.points_available_value.setText(str(avail_score_wk))
+
             
         else:
             self.selections_list_widget.clear()
@@ -93,8 +110,16 @@ class MainWindow(QMainWindow):
      def display_AR_players_name_radio(self,selected):
         if selected:
             stas_player = display_AR_players_name()
-            self.selections_list_widget.addItems(stas_player)
+            stats_player_name=[i[0] for i in stas_player]
+        
+            stats_player_value_ar=[i[1] for i in stas_player]
+            avail_score_ar=sum(stats_player_value_ar)
+
+            print("stats player value :{}".format(sum(stats_player_value_ar)))
+            self.selections_list_widget.addItems(stats_player_name)
             print(self.selections_list_widget.count())
+            self.points_available_value.setText(str(avail_score_ar))
+
             print(stas_player)
         else:
             self.selections_list_widget.clear()
@@ -133,6 +158,7 @@ class MainWindow(QMainWindow):
          if self.BAT_count>=5:
              self.showmessage("Batsmen not more than 5")
              return
+
          if self.BLW_count>=5:
              self.showmessage("bowlers not more than 5")
              return
@@ -145,7 +171,7 @@ class MainWindow(QMainWindow):
          
          print(total_player_count)
 
-         if total_player_count == 12:
+         if total_player_count > 12:
              self.showmessage("All players added,cant include more players")
              return
          
