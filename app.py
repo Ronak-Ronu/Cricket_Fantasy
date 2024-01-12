@@ -18,6 +18,7 @@ class MainWindow(QMainWindow):
         self.BLW_count = 0
         self.is_player_selected = set()
         self.points_used=0
+        self.default_team_name="Default_Team"
         # self.team_added_count=0
 
         loadUi("app.ui",self)
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
         self.AR_radio_btn.toggled.connect(self.display_AR_players_name_radio)
         self.WK_radio_btn.toggled.connect(self.display_WK_players_name_radio)
         self.selections_list_widget.itemClicked.connect(self.add_item_to_selected_list)
-
+    
      def new_team_win_func(self):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
@@ -46,7 +47,22 @@ class MainWindow(QMainWindow):
      
      def save_team(self):
         #  insert_new_team()
+         players_name=self.get_team_data()
+         players_value = []
+         if self.Team_name_value.text()=='':
+            self.default_team_name="Default_Team"
+         else:
+             self.default_team_name= self.Team_name_value.text()
+         print("Team Name : {}".format(self.default_team_name))
+         for i in range(len(players_name)): 
+            players_value.append(get_player_value(players_name[i]))
+         print(players_value,players_name)
+         for j in range(len(players_name)):
+            insert_new_team(self.default_team_name,players_name[j],players_value[j])
          self.showmessage("saved")
+
+
+
      def eval_team(self):
          self.showmessage("team evalutation")
      def open_team(self):
@@ -138,14 +154,23 @@ class MainWindow(QMainWindow):
          
          if player_role=="BAT" :
                 self.BAT_count+=1
+                if self.BAT_count>6:
+                    self.showmessage("Batsmen not more than 5")
+                    return
                 self.batman_value.setText(str(self.BAT_count))
 
          if player_role=="BWL" :
              self.BLW_count+=1
+             if self.BLW_count>6:
+                self.showmessage("bowlers not more than 5")
+                return
              self.bowler_value.setText(str(self.BLW_count))
 
          if player_role=="AR" :
              self.AR_count+=1
+             if self.AR_count>4:
+                self.showmessage("Allrounders not more than 3")
+                return
              self.allrounde_value.setText(str(self.AR_count))
 
          if player_role=="WK":
@@ -155,16 +180,16 @@ class MainWindow(QMainWindow):
                 return
              self.wicketkeeper_value.setText(str(self.WK_count))
 
-         if self.BAT_count>=5:
-             self.showmessage("Batsmen not more than 5")
-             return
+        #  if self.BAT_count>=5:
+        #      self.showmessage("Batsmen not more than 5")
+        #      return
 
-         if self.BLW_count>=5:
-             self.showmessage("bowlers not more than 5")
-             return
-         if self.AR_count>3:
-             self.showmessage("Allrounders not more than 3")
-             return
+        #  if self.BLW_count>=5:
+        #      self.showmessage("bowlers not more than 5")
+        #      return
+        #  if self.AR_count>3:
+        #      self.showmessage("Allrounders not more than 3")
+        #      return
          
          
          total_player_count= self.BAT_count+self.WK_count+self.AR_count+self.WK_count
@@ -181,13 +206,20 @@ class MainWindow(QMainWindow):
          self.points_used_value.setText(str(self.points_used))
          print("team_added_list_widget {}".format(team_added_count))
 
+
+
      def showmessage(self,msg):
         Dialog=QtWidgets.QMessageBox()
         Dialog.setText(msg)
-        Dialog.setWindowTitle("Warning")
+        Dialog.setWindowTitle("Hey Its Warning !")
         ret=Dialog.exec()
 
-
+     def get_team_data(self):
+         team_data = []
+         for row in range(self.team_added_list_widget.count()):
+            item = self.team_added_list_widget.item(row)
+            team_data.append(item.text())
+         return team_data
 
 
 
@@ -242,7 +274,6 @@ class New_Team_Add_UI(QMainWindow):
         ro=self.players_ro_inp.text()
         insert_new_match(players,scored,faced,fours,sixes,bowled,wkts,given,maiden,catches,stumping,ro)
         self.is_data_added.setText("match Added Successfully")
-
 
 
 

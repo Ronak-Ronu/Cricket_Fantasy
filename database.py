@@ -138,6 +138,7 @@ def check_player_role(player):
     db.close()
     return row[0]
 
+
 def get_player_value(player):
     db = sqlite3.connect('database.db')
     query="""
@@ -148,6 +149,8 @@ def get_player_value(player):
     row=cur.fetchone()
     db.close()
     return row[0]
+
+    
 
 
 cursor.execute(match)
